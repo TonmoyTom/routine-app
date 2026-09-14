@@ -1,0 +1,133 @@
+:root {
+  /* paper and ink */
+  --paper: #F4F0E6;
+  --card: #FFFFFF;
+  --ink: #2E4438;
+  --muted: #8B9C8E;
+  --hair: rgba(46, 68, 56, 0.09);
+
+  /* completion */
+  --amber: #E89A3C;
+  --amber-soft: #FCEBD3;
+  --amber-ink: #B4671B;
+
+  /* secondary accents */
+  --sage: #A9C6A0;
+  --sage-soft: #E4EFDE;
+  --clay: #C4623C;
+
+  /* the session player */
+  --pulse: #6FB894;
+
+  --shadow: 0 2px 16px rgba(46, 68, 56, 0.07);
+  --shadow-lift: 0 6px 22px rgba(232, 154, 60, 0.20);
+  --r: 22px;
+}
+
+/* each day type owns a tint, so the four days feel different
+   before you read a word */
+.day-gym  { --tint: #DCE9D4; --tint-deep: #B9D2AC; }
+.day-home { --tint: #F7DFC8; --tint-deep: #EEC49C; }
+.day-rest { --tint: #E5E4EE; --tint-deep: #C8C6DC; }
+.day-easy { --tint: #FAEFC4; --tint-deep: #F0DC94; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body, #__nuxt { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: var(--amber-ink); text-decoration: none; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+.screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* the tinted header panel */
+.panel {
+  background: linear-gradient(168deg, var(--tint-deep), var(--tint));
+  border-radius: 0 0 34px 34px;
+  padding: 34px 26px 30px;
+}
+
+.eyebrow { font-size: 14px; font-weight: 500; color: rgba(46,68,56,0.62); }
+
+.headline {
+  margin: 14px 0 0;
+  font-size: 66px; font-weight: 800; line-height: 0.88;
+  letter-spacing: -0.02em; color: var(--ink);
+  font-variation-settings: 'opsz' 66, 'wdth' 86;
+}
+
+.subhead {
+  margin-top: 8px;
+  font-size: 22px; font-weight: 600; line-height: 1;
+  color: rgba(46,68,56,0.55);
+  font-variation-settings: 'opsz' 22, 'wdth' 90;
+}
+
+.card { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); }
+
+/* ---- page transitions ---------------------------------------------- */
+
+.push-enter-active,
+.pop-enter-active,
+.nav-right-enter-active,
+.nav-left-enter-active {
+  transition: opacity 260ms ease, transform 300ms cubic-bezier(0.22, 0.72, 0.3, 1);
+}
+
+.push-leave-active,
+.pop-leave-active,
+.nav-right-leave-active,
+.nav-left-leave-active {
+  transition: opacity 170ms ease, transform 190ms ease-in;
+}
+
+/* opening a screen: it rises into place */
+.push-enter-from { opacity: 0; transform: translateY(26px) scale(0.985) }
+.push-leave-to   { opacity: 0; transform: scale(0.985) }
+
+/* backing out: the screen settles back down */
+.pop-enter-from  { opacity: 0; transform: scale(0.99) }
+.pop-leave-to    { opacity: 0; transform: translateY(24px) }
+
+/* between tabs: travel matches the direction of the tab bar */
+.nav-right-enter-from { opacity: 0; transform: translateX(22px) }
+.nav-right-leave-to   { opacity: 0; transform: translateX(-16px) }
+.nav-left-enter-from  { opacity: 0; transform: translateX(-22px) }
+.nav-left-leave-to    { opacity: 0; transform: translateX(16px) }
+
+/* rows arrive in a short stagger the first time a screen is shown */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px) }
+  to   { opacity: 1; transform: none }
+}
+
+.stagger > * {
+  animation: rise 380ms cubic-bezier(0.22, 0.72, 0.3, 1) backwards;
+}
+.stagger > :nth-child(1) { animation-delay: 40ms }
+.stagger > :nth-child(2) { animation-delay: 85ms }
+.stagger > :nth-child(3) { animation-delay: 130ms }
+.stagger > :nth-child(4) { animation-delay: 175ms }
+.stagger > :nth-child(5) { animation-delay: 220ms }
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger > * { animation: none }
+
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
